@@ -1,16 +1,11 @@
 # hvz_flutter_app
 
-A new Flutter application.
+Flutter Application for UWaterloo Humans vs Zombies. Development in progress.
 
-## Getting Started
+To contribute, fork the repository, and submit a pull request.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Expected features:
+- Link with website (blocked waiting for public API)
+- Twitter feed
+- Rules document
+- Camera/Image storage functionality with possible QR code scanning for future supply codes (maybe)
