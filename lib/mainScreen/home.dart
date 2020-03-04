@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hvz_flutter_app/mainScreen/widgets/supplyCodeWidget.dart';
+import 'package:hvz_flutter_app/utilities/apiManager.dart';
 import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
-import 'file:///C:/Users/starl/Documents/Github/hvz_flutter_app/lib/utilities/apiManager.dart';
 
 import '../applicationData.dart';
 import '../constants/constants.dart';
