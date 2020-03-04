@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:hvz_flutter_app/constants.dart';
+import 'package:hvz_flutter_app/constants/constants.dart';
 import 'package:hvz_flutter_app/models/twitter/tweetList.dart';
 import 'package:tweet_ui/models/api/tweet.dart';
 import 'package:twitter_api/twitter_api.dart';

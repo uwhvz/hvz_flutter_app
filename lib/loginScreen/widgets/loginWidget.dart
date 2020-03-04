@@ -7,7 +7,7 @@ class LoginWidget extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
-  final Function() submit;
+  final Function(BuildContext) submit;
 
   final String assetName = 'assets/uwhvz-logo.svg';
   @override
@@ -39,6 +39,7 @@ class LoginWidget extends StatelessWidget {
                             children: <Widget>[
                               TextField(
                                   controller: emailController,
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                       fillColor: Color.fromRGBO(0, 0, 0, 0),
                                       labelText: 'Email'
@@ -54,7 +55,7 @@ class LoginWidget extends StatelessWidget {
                               Container(
                                 margin: EdgeInsets.only(top: 20.0),
                                 child: RaisedButton(
-                                  onPressed: () => submit(),
+                                  onPressed: () => submit(context),
                                   child: Text('Login'),
                                 ),
                               )

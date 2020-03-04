@@ -4,6 +4,7 @@ import 'package:hvz_flutter_app/loginScreen/widgets/loginWidget.dart';
 import 'package:hvz_flutter_app/utilities/apiManager.dart';
 import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
 import 'package:hvz_flutter_app/mainScreen/home.dart';
+import 'package:hvz_flutter_app/utilities/util.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     }
   }
 
-  void _submit() async {
+  void _submit(BuildContext context) async {
     int responseCode = await loadingDialogManager.performLoadingTask(
       context,
       apiManager.login(emailController.text, passwordController.text),
@@ -65,6 +66,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     );
 
     if (responseCode == null) return;
+    FocusScope.of(context).unfocus();
     _navigateToMainScreen(responseCode);
   }
 
@@ -78,45 +80,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
         return;
       case 403:
       case 404:
-        _showAlertDialog(context, "Invalid Credentials. Please try again.");
+        Utilities.showErrorDialog(context, "Invalid Credentials. Please try again.");
         return;
       case 500:
-        _showAlertDialog(context, "Interal Server Error. Please contact the HvZ admin for assistance.");
+        Utilities.showErrorDialog(context, "Interal Server Error. Please contact the HvZ admin for assistance.");
         return;
       default:
-        _showAlertDialog(context, "Unknown Error. Please contact the HvZ admin for assistance.");
+        Utilities.showErrorDialog(context, "Unknown Error. Please contact the HvZ admin for assistance.");
         return;
     }
   }
 
-  _showAlertDialog(BuildContext context, String message) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () { Navigator.of(context).pop(); },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Error"),
-      content: Text(message.toString()),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-
   void _onError(String devLog, String alert) {
-    _showAlertDialog(context, alert);
+    Utilities.showErrorDialog(context, alert);
   }
 }
 

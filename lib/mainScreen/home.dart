@@ -4,7 +4,7 @@ import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
 import 'file:///C:/Users/starl/Documents/Github/hvz_flutter_app/lib/utilities/apiManager.dart';
 
 import '../applicationData.dart';
-import '../constants.dart';
+import '../constants/constants.dart';
 import '../models/player/playerInfo.dart';
 import 'widgets/mainWidget.dart';
 import 'widgets/tagStunWidget.dart';
@@ -57,6 +57,9 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     widget.apiManager.setCookieJarInterceptor();
+    if (appData.info.roleChar == 'H') {
+      widget.drawerItems.add(DrawerItem("Claim a supply code", DrawerState.SUPPLY_CODE));
+    }
   }
 
   _onSelectDrawerItem(DrawerItem item) {
