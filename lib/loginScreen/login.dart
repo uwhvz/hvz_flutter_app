@@ -78,6 +78,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                 builder: (context) => HomePage()
             ));
         return;
+      case 401:
       case 403:
       case 404:
         Utilities.showErrorDialog(context, "Invalid Credentials. Please try again.");
