@@ -140,6 +140,33 @@ class APIManager {
     return [response.statusCode, response.data];
   }
 
+  Future<List<dynamic>> claimSupplyCode(String code) async {
+    Map<String, dynamic> data = {
+      "code": code,
+    };
+
+    List<Cookie> cookies = List();
+    Cookie csrf;
+    if (_cj != null) {
+      List<Cookie> cookies = _cj.loadForRequest(Uri.parse(_hvzUrl));
+      csrf = cookies.firstWhere((element) => element.name == "csrftoken", );
+    } else {
+      csrf = Cookie("", "");
+    }
+    Response response = await _dio.post(_hvzUrl + ApiConstants.supply_code,
+        data: data,
+        options: Options(
+            headers: {
+              "X-CSRFToken" : csrf.value
+            },
+            contentType: Headers.formUrlEncodedContentType,
+            validateStatus: (status) { return status < 500; }
+        )
+    );
+
+    return [response.statusCode, response.data];
+  }
+
   bool checkCookieExpiration() {
     if (_cj == null) {
       developer.log("Null cookie jar", name: "APIManager");

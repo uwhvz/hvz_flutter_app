@@ -22,12 +22,9 @@ class LoginWidget extends StatelessWidget {
                     visible: MediaQuery.of(context).orientation == Orientation.portrait,
                     child: Expanded(
                       flex: 3,
-                      child: Hero(
-                        tag: "logo",
-                        child: SvgPicture.asset(
-                          assetName,
-                          semanticsLabel: 'HvZ Logo',
-                        )
+                      child: SvgPicture.asset(
+                        assetName,
+                        semanticsLabel: 'HvZ Logo',
                       )
                     )
                   ),

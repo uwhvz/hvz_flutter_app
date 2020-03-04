@@ -81,6 +81,7 @@ class TagStunWidget extends StatelessWidget {
       return; // error happened above
     }
     if (response[0] == 200) {
+      _apiManager.getAccountInfo();
       String actionString;
       if (_playerInfo.roleChar == 'H')
         actionString = "stunned";

@@ -5,11 +5,22 @@ import 'package:hvz_flutter_app/mainScreen/widgets/dialogs/main_factionDialog.da
 import 'package:hvz_flutter_app/mainScreen/widgets/dialogs/main_playerCodeDialog.dart';
 import 'package:hvz_flutter_app/mainScreen/widgets/dialogs/main_supplyDialog.dart';
 import 'package:hvz_flutter_app/models/player/game.dart';
+import 'package:hvz_flutter_app/models/player/playerInfo.dart';
+import 'package:hvz_flutter_app/utilities/apiManager.dart';
+import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
 
 enum RowPosition { LEFT, RIGHT, MIDDLE, SINGLE }
 
-class MainWidget extends StatelessWidget {
-  final playerInfo = ApplicationData().info;
+class MainWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MainState();
+
+  final APIManager _apiManager = APIManager();
+}
+
+class MainState extends State<MainWidget> with WidgetsBindingObserver{
+  PlayerInfo playerInfo = ApplicationData().info;
+  final _loadingDialogManager = LoadingDialogManager();
 
   @override
   Widget build(BuildContext context) {
@@ -258,5 +269,21 @@ class MainWidget extends StatelessWidget {
         return SupplyDialog(context, playerInfo, okButton);
       },
     );
+  }
+
+  _refreshData() async {
+    _loadingDialogManager.performLoadingTask(
+        context,
+        widget._apiManager.getAccountInfo()
+        , () => setState(() {}));
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("State changed");
+    if (state == AppLifecycleState.resumed) {
+      print("Resumed");
+      _refreshData();
+    }
   }
 }
