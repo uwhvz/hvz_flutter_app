@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hvz_flutter_app/applicationData.dart';
-import 'package:hvz_flutter_app/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:hvz_flutter_app/constants/apiConstants.dart';
+import 'package:hvz_flutter_app/constants/constants.dart';
 import 'package:hvz_flutter_app/models/player/playerInfo.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:developer' as developer;
@@ -13,10 +14,10 @@ import 'dart:developer' as developer;
 class APIManager {
   static final APIManager _singleton = APIManager._internal();
 
-  String hvzUrl;
-  Dio dio = Dio();
-  PersistCookieJar cj;
-  ApplicationData appData = ApplicationData();
+  String _hvzUrl;
+  Dio _dio = Dio();
+  PersistCookieJar _cj;
+  ApplicationData _appData = ApplicationData();
 
   factory APIManager() {
     return _singleton;
@@ -24,9 +25,9 @@ class APIManager {
 
   APIManager._internal() {
     if (kReleaseMode) {
-      hvzUrl = Constants.PRODUCTION_URL;
+      _hvzUrl = Constants.PRODUCTION_URL;
     } else {
-      hvzUrl = Constants.TESTING_URL;
+      _hvzUrl = Constants.TESTING_URL;
     }
   }
 
@@ -45,14 +46,14 @@ class APIManager {
   Future<String> setCookieJarInterceptor() async {
     Directory dir = await _localCoookieDirectory;
     final cookiePath = dir.path;
-    cj = PersistCookieJar(dir: cookiePath);
-    dio.interceptors.add(CookieManager(cj));
+    _cj = PersistCookieJar(dir: cookiePath);
+    _dio.interceptors.add(CookieManager(_cj));
     return cookiePath;
   }
 
   Future<int> login(String username, String password) async {
-    String loginUrl = hvzUrl + "auth/login/";
-    Response response = await dio.post(
+    String loginUrl = _hvzUrl + ApiConstants.login;
+    Response response = await _dio.post(
         loginUrl,
         data: {
           "username": username,
@@ -75,7 +76,7 @@ class APIManager {
   }
 
   Future<int> getAccountInfo() async {
-    Response response = await dio.get(hvzUrl + "account_info",
+    Response response = await _dio.get(_hvzUrl + ApiConstants.account_info,
         options: Options(
           //followRedirects: false,
             validateStatus: (status) { return status < 500; }
@@ -85,34 +86,21 @@ class APIManager {
     if (response.statusCode == 200) {
       PlayerInfo info = PlayerInfo.fromJson(response.data);
       setUserData(info);
-      developer.log("Data processing success.", name: "hvzapilogin");
-    } else {
-      developer.log("Error processing data " + response.statusCode.toString(), name: "hvzapilogin");
     }
     return response.statusCode;
   }
 
   void setUserData(PlayerInfo info) {
-    if (info == null) {
-      developer.log("Info is null", name: "hvzapilogin");
-      return;
-    } else if (appData.info == null) {
-      developer.log("AppData info is null", name: "hvzapilogin");
+    if (info == null || _appData.info == null) {
       return;
     }
 
-    appData.info = info;
-    appData.loggedIn = true;
+    _appData.info = info;
+    _appData.loggedIn = true;
   }
 
   Future<int> logout() async {
-    if (cj != null) {
-      List<Cookie> cookies = cj.loadForRequest(Uri.parse(hvzUrl));
-      developer.log(cookies.length.toString(), name: "APIManager logout");
-    } else {
-      developer.log("Cookie Jar is null", name: "APIManager logout");
-    }
-    Response response = await dio.get(hvzUrl + "auth/logout/",
+    Response response = await _dio.get(_hvzUrl + ApiConstants.logout,
       options: Options(
         responseType: ResponseType.plain,
       )
@@ -121,12 +109,70 @@ class APIManager {
     return response.statusCode;
   }
 
+  Future<List<dynamic>> stunOrTag(String code, int time, String location, String description) async {
+    Map<String, dynamic> data = {
+      "code": code,
+      "time": time,
+    };
+
+    if (location != null && location.isNotEmpty) data["location"] = location;
+    if (description != null && description.isNotEmpty) data["description"] = description;
+
+    List<Cookie> cookies = List();
+    Cookie csrf;
+    if (_cj != null) {
+      List<Cookie> cookies = _cj.loadForRequest(Uri.parse(_hvzUrl));
+      csrf = cookies.firstWhere((element) => element.name == "csrftoken", );
+    } else {
+      csrf = Cookie("", "");
+    }
+    Response response = await _dio.post(_hvzUrl + ApiConstants.stun_tag,
+      data: data,
+      options: Options(
+        headers: {
+          "X-CSRFToken" : csrf.value
+        },
+        contentType: Headers.formUrlEncodedContentType,
+        validateStatus: (status) { return status < 500; }
+      )
+    );
+
+    return [response.statusCode, response.data];
+  }
+
+  Future<List<dynamic>> claimSupplyCode(String code) async {
+    Map<String, dynamic> data = {
+      "code": code,
+    };
+
+    List<Cookie> cookies = List();
+    Cookie csrf;
+    if (_cj != null) {
+      List<Cookie> cookies = _cj.loadForRequest(Uri.parse(_hvzUrl));
+      csrf = cookies.firstWhere((element) => element.name == "csrftoken", );
+    } else {
+      csrf = Cookie("", "");
+    }
+    Response response = await _dio.post(_hvzUrl + ApiConstants.supply_code,
+        data: data,
+        options: Options(
+            headers: {
+              "X-CSRFToken" : csrf.value
+            },
+            contentType: Headers.formUrlEncodedContentType,
+            validateStatus: (status) { return status < 500; }
+        )
+    );
+
+    return [response.statusCode, response.data];
+  }
+
   bool checkCookieExpiration() {
-    if (cj == null) {
+    if (_cj == null) {
       developer.log("Null cookie jar", name: "APIManager");
       return true;
     } // if there's no cookie jar, treat it as a fresh login
-    List<Cookie> savedCookies = cj.loadForRequest(Uri.parse(hvzUrl));
+    List<Cookie> savedCookies = _cj.loadForRequest(Uri.parse(_hvzUrl));
     if (savedCookies.length < 2) return true;
     bool expired = savedCookies.fold(true, (previous, cookie) => cookie.expires.isBefore(DateTime.now()) && previous);
     return expired;

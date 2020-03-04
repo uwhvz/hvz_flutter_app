@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hvz_flutter_app/mainScreen/widgets/supplyCodeWidget.dart';
+import 'package:hvz_flutter_app/utilities/apiManager.dart';
 import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
-import 'file:///C:/Users/starl/Documents/Github/hvz_flutter_app/lib/utilities/apiManager.dart';
 
 import '../applicationData.dart';
-import '../constants.dart';
+import '../constants/constants.dart';
 import '../models/player/playerInfo.dart';
 import 'widgets/mainWidget.dart';
 import 'widgets/tagStunWidget.dart';
@@ -46,6 +47,8 @@ class HomePageState extends State<HomePage> {
         return TagStunWidget();
       case DrawerState.TWITTER:
         return TwitterWidget();
+      case DrawerState.SUPPLY_CODE:
+        return SupplyCodeWidget();
       default:
         return Text(
             "An error has occured. Please contact the HvZ executive team."
@@ -86,6 +89,16 @@ class HomePageState extends State<HomePage> {
           )
       );
     });
+    if (appData.info.roleChar == 'H') {
+      DrawerItem supplyCodeItem = DrawerItem("Claim a supply code", DrawerState.SUPPLY_CODE);
+      drawerOptions.add(
+        new ListTile(
+          title: new Text(supplyCodeItem.text),
+          selected: supplyCodeItem.key == _selectedDrawerState,
+          onTap: () => _onSelectDrawerItem(supplyCodeItem),
+        )
+      );
+    }
 
     drawerOptions.add(
       new ListTile(
