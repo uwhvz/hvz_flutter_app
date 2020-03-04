@@ -1,8 +1,8 @@
 
 class Constants {
-  static const PRODUCTION_URL = 'https://uwhvz.uwaterloo.ca/api/';
+  static const PRODUCTION_URL = 'https://uwhvz.uwaterloo.ca/api/v1/';
   // Change this to your testing server if you wish.
-  static const TESTING_URL = 'https://uwhvz.uwaterloo.ca/api/';
+  static const TESTING_URL = 'https://uwhvz.uwaterloo.ca/api/v1/';
 
   // Twitter Keys. We're using a free API, so they're visible. Feel free to use
   // them for your testing, or to generate your own.
