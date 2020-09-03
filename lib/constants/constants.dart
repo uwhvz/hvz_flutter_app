@@ -16,6 +16,7 @@ class Constants {
 enum DrawerState {
   PROFILE,
   TAG_STUN,
+  VIEW_TAGS,
   TWITTER,
   SUPPLY_CODE,
   ERROR,

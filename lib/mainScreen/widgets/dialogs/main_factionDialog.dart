@@ -16,52 +16,55 @@ class FactionDialog extends AlertDialog {
 
   @override
   Widget get content => Container(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                      child: Container(
-                        color: Theme.of(parentContext).primaryColor,
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Faction",
-                          textScaleFactor: 3.0,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
+    child: SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                          color: Theme.of(parentContext).primaryColor,
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Faction",
+                            textScaleFactor: 3.0,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      )
-                  )
-                ]
-            ),
-            Container (
-              margin: EdgeInsets.only(top: 10, bottom: 10),
-              child: Text (
-                faction.name,
-                textScaleFactor: 2.0,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold
+                        )
+                    )
+                  ]
+              ),
+              Container (
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                child: Text (
+                  faction.name,
+                  textScaleFactor: 2.0,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold
+                  ),
                 ),
               ),
-            ),
-            Container (
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Text(
-                faction.description,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontStyle: FontStyle.italic
+              Container (
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Text(
+                  faction.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic
+                  ),
                 ),
               ),
-            ),
-            ..._getFactionModifierDisplays()
-          ]
-      )
+              ..._getFactionModifierDisplays()
+            ]
+        )
+    )
   );
 
   List<Widget> _getFactionModifierDisplays() {

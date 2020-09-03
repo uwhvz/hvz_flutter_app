@@ -10,9 +10,9 @@ import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
 import 'package:hvz_flutter_app/utilities/util.dart';
 
 class TagStunWidget extends StatelessWidget {
-  APIManager _apiManager = APIManager();
-  PlayerInfo _playerInfo = ApplicationData().info;
-  LoadingDialogManager _loadingDialogManager = LoadingDialogManager();
+  final APIManager _apiManager = APIManager();
+  final PlayerInfo _playerInfo = ApplicationData().info;
+  final LoadingDialogManager _loadingDialogManager = LoadingDialogManager();
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +54,18 @@ class TagStunWidget extends StatelessWidget {
 
   Future _scan(BuildContext context) async {
     try {
+      print("Here");
       String barcode = await BarcodeScanner.scan();
+
       _sendTagStun(context, barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         Utilities.showErrorDialog(context, 'The user did not grant camera permission!');
       } else {
-        Utilities.showErrorDialog(context, 'Unknown error: $e');
+        // Do nothing.
       }
     } catch (e) {
-      Utilities.showErrorDialog(context, 'Unknown error: $e');
+      // Do nothing.
     }
   }
 
@@ -74,7 +76,7 @@ class TagStunWidget extends StatelessWidget {
           code,
           DateTime.now().millisecondsSinceEpoch~/1000,
           "",
-          "Verified by QR code, checksum 123456"),
+          "Verified by QR code through mobile app."),
         () => Utilities.showErrorDialog(context, 'An application error occured. Please contact the HvZ moderator team'));
 
     if (response == null) {

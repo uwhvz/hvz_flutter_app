@@ -8,6 +8,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hvz_flutter_app/constants/apiConstants.dart';
 import 'package:hvz_flutter_app/constants/constants.dart';
 import 'package:hvz_flutter_app/models/player/playerInfo.dart';
+import 'package:hvz_flutter_app/models/player/tagLists.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:developer' as developer;
 
@@ -90,6 +91,19 @@ class APIManager {
     return response.statusCode;
   }
 
+  Future<TagLists> getStunTags() async {
+    Response response = await _dio.get(_hvzUrl + ApiConstants.get_stun_tag_list,
+        options: Options(
+          validateStatus: (status) { return status < 500; }
+        )
+    );
+
+    if (response.statusCode == 200) {
+      return TagLists.fromJson(response.data);
+    }
+    return null;
+  }
+
   void setUserData(PlayerInfo info) {
     if (info == null || _appData.info == null) {
       return;
@@ -118,7 +132,6 @@ class APIManager {
     if (location != null && location.isNotEmpty) data["location"] = location;
     if (description != null && description.isNotEmpty) data["description"] = description;
 
-    List<Cookie> cookies = List();
     Cookie csrf;
     if (_cj != null) {
       List<Cookie> cookies = _cj.loadForRequest(Uri.parse(_hvzUrl));
@@ -145,7 +158,6 @@ class APIManager {
       "code": code,
     };
 
-    List<Cookie> cookies = List();
     Cookie csrf;
     if (_cj != null) {
       List<Cookie> cookies = _cj.loadForRequest(Uri.parse(_hvzUrl));

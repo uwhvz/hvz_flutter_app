@@ -10,6 +10,7 @@ import '../models/player/playerInfo.dart';
 import 'widgets/mainWidget.dart';
 import 'widgets/tagStunWidget.dart';
 import 'widgets/twitterWidget.dart';
+import 'widgets/viewTagsStunsWidget.dart';
 
 class DrawerItem {
   String text;
@@ -25,7 +26,8 @@ class HomePage extends StatefulWidget {
 
   final drawerItems = [
     DrawerItem("Player Dashboard", DrawerState.PROFILE),
-    DrawerItem("Report a tag or stun", DrawerState.TAG_STUN),
+    DrawerItem("Report Tags/Stuns", DrawerState.TAG_STUN),
+    DrawerItem("View Submitted Tags/Stuns", DrawerState.VIEW_TAGS),
     DrawerItem("Twitter Feed", DrawerState.TWITTER),
   ];
 
@@ -45,6 +47,8 @@ class HomePageState extends State<HomePage> {
         return MainWidget();
       case DrawerState.TAG_STUN:
         return TagStunWidget();
+      case DrawerState.VIEW_TAGS:
+        return PendingTagStunWidget();
       case DrawerState.TWITTER:
         return TwitterWidget();
       case DrawerState.SUPPLY_CODE:

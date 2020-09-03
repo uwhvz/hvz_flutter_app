@@ -5,11 +5,10 @@ class SupplyDialog extends AlertDialog{
   final BuildContext parentContext;
   final PlayerInfo info;
   final Widget dismiss;
-  bool supplied;
+  final bool supplied;
 
-  SupplyDialog(this.parentContext, this.info, this.dismiss) {
-    supplied = info.score >= 5;
-  }
+  SupplyDialog(this.parentContext, this.info, this.dismiss) :
+        supplied = info.score >= 5;
 
   @override
   List<Widget> get actions => <Widget>[dismiss];
