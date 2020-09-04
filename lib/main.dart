@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.grey[900],
         accentColor: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: LoginPage(),
     );
   }
