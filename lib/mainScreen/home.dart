@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hvz_flutter_app/mainScreen/widgets/playerListWidget.dart';
 import 'package:hvz_flutter_app/mainScreen/widgets/supplyCodeWidget.dart';
 import 'package:hvz_flutter_app/utilities/apiManager.dart';
 import 'package:hvz_flutter_app/utilities/loadingDialogManager.dart';
@@ -28,6 +29,7 @@ class HomePage extends StatefulWidget {
     DrawerItem("Player Dashboard", DrawerState.PROFILE),
     DrawerItem("Report Tags/Stuns", DrawerState.TAG_STUN),
     DrawerItem("View Submitted Tags/Stuns", DrawerState.VIEW_TAGS),
+    DrawerItem("View Players", DrawerState.VIEW_PLAYERS),
     DrawerItem("Twitter Feed", DrawerState.TWITTER),
   ];
 
@@ -49,6 +51,8 @@ class HomePageState extends State<HomePage> {
         return TagStunWidget();
       case DrawerState.VIEW_TAGS:
         return PendingTagStunWidget();
+      case DrawerState.VIEW_PLAYERS:
+        return PlayerListWidget();
       case DrawerState.TWITTER:
         return TwitterWidget();
       case DrawerState.SUPPLY_CODE:

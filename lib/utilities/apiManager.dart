@@ -9,6 +9,7 @@ import 'package:hvz_flutter_app/constants/apiConstants.dart';
 import 'package:hvz_flutter_app/constants/constants.dart';
 import 'package:hvz_flutter_app/models/player/playerInfo.dart';
 import 'package:hvz_flutter_app/models/player/tagLists.dart';
+import 'package:hvz_flutter_app/models/userInfo/playerList.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:developer' as developer;
 
@@ -100,6 +101,19 @@ class APIManager {
 
     if (response.statusCode == 200) {
       return TagLists.fromJson(response.data);
+    }
+    return null;
+  }
+
+  Future<PlayerList> getPlayerList() async {
+    Response response = await _dio.get(_hvzUrl + ApiConstants.view_player_list,
+        options: Options(
+            validateStatus: (status) { return status < 500; }
+        )
+    );
+
+    if (response.statusCode == 200) {
+      return PlayerList.fromJson(response.data, _appData.info.roleChar != "H");
     }
     return null;
   }

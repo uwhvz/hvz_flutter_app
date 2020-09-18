@@ -17,6 +17,7 @@ enum DrawerState {
   PROFILE,
   TAG_STUN,
   VIEW_TAGS,
+  VIEW_PLAYERS,
   TWITTER,
   SUPPLY_CODE,
   ERROR,
